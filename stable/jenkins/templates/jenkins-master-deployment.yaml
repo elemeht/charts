@@ -57,6 +57,12 @@ spec:
           imagePullPolicy: "{{.Values.Master.ImagePullPolicy}}"
           {{- if .Values.Master.UseSecurity }}
           args: [ "--argumentsRealm.passwd.$(ADMIN_USER)=$(ADMIN_PASSWORD)",  "--argumentsRealm.roles.$(ADMIN_USER)=admin"]
+          {{- if .Values.Master.HostName }}
+          readinessProbe:
+            httpGet:
+              path: /login
+              port: 8080
+          {{- end }}
           {{- end }}
           env:
             - name: JAVA_OPTS

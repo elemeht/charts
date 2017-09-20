@@ -12,7 +12,11 @@ spec:
   - host: {{ .Values.Master.HostName | quote }}
     http:
       paths:
+      {{- if eq .Values.Master.Ingress.Annotations.kubernetes\.io\/ingress\.class "gce"}}
+      - path: /*
+      {{- else }}
       - path: /
+      {{- end }}
         backend:
           serviceName: {{ template "fullname" . }}
           servicePort: {{ .Values.Master.ServicePort }}
